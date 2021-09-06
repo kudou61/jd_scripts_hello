@@ -38,7 +38,7 @@ let jdNotify = false, runTimesErr = '', runTimesErrCount = 0;//是否关闭通�
 
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let goodsUrl = '', taskInfoKey = [];
-let randomCount = $.isNode() ? 20 : 5;
+const randomCount = $.isNode() ? 0 : 5;
 !(async () => {
   await requireConfig();
   if (!cookiesArr[0]) {
