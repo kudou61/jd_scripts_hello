@@ -8,7 +8,7 @@ jobs:
   update_external_airflow_fork:
     runs-on: ubuntu-latest
     steps:
-      - uses: kudou61/jd_scripts_hello@main
+      - uses: TobKed/github-forks-sync-action@master
         with:
           github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }} # 令牌
           upstream_repository: JDHelloWorld/jd_scripts # 上游仓库
