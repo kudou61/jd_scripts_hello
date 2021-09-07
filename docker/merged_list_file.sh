@@ -60,4 +60,4 @@
 3 1 * * * . /scripts/docker/auto_help.sh export > /scripts/logs/auto_help_export.log && node  /scripts/jd_jin_tie.js |ts >> /scripts/logs/jd_jin_tie.log 2>&1#docker挂载自定义shell脚本追加定时任务
 
 # 必须要的默认定时任务请勿删除
-7 3 * * * docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1
+31 17 * * * docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1

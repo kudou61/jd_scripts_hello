@@ -18,7 +18,7 @@ if (process.env.JD_COOKIE) {
 }
 // 读取cookies文件
 try {
-  let cookiesString = fs.readFileSync('./logs/cookies.list', 'utf8');
+  let cookiesString = fs.readFileSync('/scripts/logs/cookies.list', 'utf8');
   if (cookiesString) {
     CookieJDs = [... new Set(cookiesString.split("\n"))];
   }
