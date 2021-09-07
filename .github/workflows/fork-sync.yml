@@ -1,21 +1,16 @@
-name: fork-sync
+name: Sync Fork
 
 on:
-  push:
-    branches:
-      -main
+  push: 
   schedule:
-    - cron: 6 */12 * * *
+    - cron: '6 */12 * * *'
 jobs:
-  update_external_airflow_fork:
+  repo-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: TobKed/github-forks-sync-action@master
+      - uses: TG908/fork-sync@v1.1
         with:
-          github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          upstream_repository: JDHelloWorld/jd_scripts
-          target_repository: kudou61/jd_scripts_hello
-          upstream_branch: main
-          target_branch: main
-          force: true
-          tags: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: JDHelloWorld
+          head: main
+          base: main
