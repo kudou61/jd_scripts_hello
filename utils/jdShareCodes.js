@@ -1,6 +1,6 @@
 // 从日志中获取互助码
 
-// process.env.SHARE_CODE_FILE = "/scripts/logs/sharecode.log";
+process.env.SHARE_CODE_FILE = "/scripts/logs/sharecodeCollection.log";
 // process.env.JD_COOKIE = "cookie1&cookie2";
 
 exports.JDZZ_SHARECODES = [];
@@ -51,14 +51,18 @@ for (let i = 0; i < lines.length; i++) {
 for (let key in shareCodesMap) {
   shareCodesMap[key] = shareCodesMap[key].reduce((prev, cur) => prev.includes(cur) ? prev : [...prev, cur], []); // 去重
 }
-let cookieCount = 0;
-if (process.env.JD_COOKIE) {
-  if (process.env.JD_COOKIE.indexOf('&') > -1) {
-    cookieCount = process.env.JD_COOKIE.split('&').length;
-  } else {
-    cookieCount = process.env.JD_COOKIE.split('\n').length;
-  }
-}
+
+// 从日志中获取cookie总数
+let cookieCount = Object.keys(require('../jdCookie.js')).length;
+
+// let cookieCount = 0;
+// if (process.env.JD_COOKIE) {
+//   if (process.env.JD_COOKIE.indexOf('&') > -1) {
+//     cookieCount = process.env.JD_COOKIE.split('&').length;
+//   } else {
+//     cookieCount = process.env.JD_COOKIE.split('\n').length;
+//   }
+// }
 
 for (let key in shareCodesMap) {
   exports[key] = [];

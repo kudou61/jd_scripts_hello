@@ -10,10 +10,10 @@ let shareCodes = [
 ]
 
 // 从日志获取互助码
-// const logShareCodes = require('./utils/jdShareCodes');
-// if (logShareCodes.DREAM_FACTORY_SHARE_CODES.length > 0 && !process.env.DREAM_FACTORY_SHARE_CODES) {
-//   process.env.DREAM_FACTORY_SHARE_CODES = logShareCodes.DREAM_FACTORY_SHARE_CODES.join('&');
-// }
+const logShareCodes = require('./utils/jdShareCodes');
+if (logShareCodes.DREAM_FACTORY_SHARE_CODES.length > 0 && !process.env.DREAM_FACTORY_SHARE_CODES) {
+  process.env.DREAM_FACTORY_SHARE_CODES = logShareCodes.DREAM_FACTORY_SHARE_CODES.join('&');
+}
 
 // 判断环境变量里面是否有京喜工厂互助码
 if (process.env.DREAM_FACTORY_SHARE_CODES) {
