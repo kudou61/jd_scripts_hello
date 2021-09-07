@@ -1,9 +1,9 @@
 on:
   push:
     branches:
-      -master
+      -main
   schedule:
-    - cron: 6 * * * *   # 每隔12小时
+    - cron: 6 */12 * * *   # 每隔12小时
 jobs:
   update_external_airflow_fork:
     runs-on: ubuntu-latest
