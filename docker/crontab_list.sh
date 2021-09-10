@@ -43,6 +43,7 @@
 #天天提鹅 #京喜牧场
 8 */3 * * * node /scripts/jd_daily_egg.js >> /scripts/logs/jd_daily_egg.log 2>&1
 8 */3 * * * ts-node /scripts/jd_jxmc.ts >> /scripts/logs/jd_jxmc.log 2>&1
+9 */3 * * * ts-node /scripts/jd_jxmc_stock.ts >> /scripts/logs/jd_jxmc_stock.log 2>&1
 #东东超市 #十元街 #翻翻乐
 15 */1 * * * node /scripts/jd_superMarket.js >> /scripts/logs/jd_superMarket.log 2>&1
 15 */1 * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
