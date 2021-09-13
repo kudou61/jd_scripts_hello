@@ -7,7 +7,7 @@
 
 # 女装盲盒2021-9-6至2021-9-30
 37 1,23 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
-20 1,23 * * * node /scripts/jd_speed.sign.js >> /scripts/logs/jd_speed.sign.log 2>&1
+20 1,23 * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
 
 ##############长期活动##############
 # 签到
