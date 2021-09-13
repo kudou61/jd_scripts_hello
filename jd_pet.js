@@ -70,6 +70,12 @@ const randomCount = $.isNode() ? 0 : 5;
     await notify.sendNotify(`${$.name}上报失败`, runTimesErr, '', '\n\n你好,世界!')
   }
 })()
+  .catch((e) => {
+    $.log("", `❌ ${$.name}, 失败! 原因: ${e}!`, "");
+  })
+  .finally(() => {
+    $.done();
+  });
 
 async function jdPet() {
   try {
