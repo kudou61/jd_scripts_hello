@@ -14,3 +14,5 @@ jobs:
           owner: JDHelloWorld
           head: main
           base: main
+      - run: echo "merge into dev"
+      - run: git merge main
