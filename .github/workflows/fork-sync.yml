@@ -15,5 +15,5 @@ jobs:
           head: main
           base: main
       - run: echo "merge into dev"
-      - run: ls
+      - run: ls ${{ github.workspace }}
       - run: pwd
