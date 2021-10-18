@@ -15,4 +15,5 @@ jobs:
           head: main
           base: main
       - run: echo "merge into dev"
-      - run: git merge main
+      - run: ls
+      - run: pwd
