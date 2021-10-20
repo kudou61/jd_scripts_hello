@@ -35,6 +35,7 @@
 32 0-16/8,20 * * * node /scripts/jd_necklace_new.js >> /scripts/logs/jd_necklace_new.log 2>&1
 33 0-16/8,20 * * * node /scripts/jd_small_home.js >> /scripts/logs/jd_small_home.log 2>&1
 34 0-16/8,20 * * * ts-node /scripts/jd_cfd.ts >> /scripts/logs/jd_cfd.log 2>&1
+1 0-16/8,20 * * * ts-node /scripts/jd_cfd_stock.ts >> /scripts/logs/jd_cfd_stock.log 2>&1
 35 0-16/8,20 * * * node /scripts/jd_live.js >> /scripts/logs/jd_live.log 2>&1
 36 0-16/8,20 * * * node /scripts/jd_mohe.js >> /scripts/logs/jd_mohe.log 2>&1
 #京东全民开红包 #进店领豆 #取关京东店铺商品 #京东汽车 #京东秒秒币
