@@ -38,7 +38,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = ['']
+let inviteCodes = ['WN2glrjxA1jmKuzHW5h_1moF3vqjJDoSvCd3XHW7hOGz@HY3hyuygRwilY4KZF9w30rKmgTrxCcLBIWGjK0JR_HN3Iy4dpg@RtGKzbryRQOre4afQ9JigI4yfAmuXPwMMU8gRnZmFFDT369ESA@RtGKzLr1Rg2geIGZFodg1Xio71lv03D-7gXkUr77neFscIHwQg@RtGKl5r8AHDhIPjoYrdbmi7K0VTj2x2UpwW56EqEsVPcx2hN']
 
 !(async () => {
   if (!cookiesArr[0]) {
@@ -258,7 +258,7 @@ function city_lotteryAward() {
 
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `https://api.jdsharecode.xyz/api/city/30`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://api.jdsharecode.xyz/api/city/0`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
