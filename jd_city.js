@@ -256,7 +256,7 @@ function readShareCode() {
       fs.writeFileSync('/etc/hosts', '')
     } catch (e) {
     }
-    $.get({url: `https://api.jdsharecode.xyz/api/city/30`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://api.jdsharecode.xyz/api/city/0`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -280,7 +280,7 @@ function readShareCode() {
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
-    $.newShareCodes = [];
+    $.newShareCodes = ['WN2glrjxA1jmKuzHW5h_1moF3vqjJDoSvCd3XHW7hOGz@HY3hyuygRwilY4KZF9w30rKmgTrxCcLBIWGjK0JR_HN3Iy4dpg@RtGKzbryRQOre4afQ9JigI4yfAmuXPwMMU8gRnZmFFDT369ESA@RtGKzLr1Rg2geIGZFodg1Xio71lv03D-7gXkUr77neFscIHwQg@RtGKl5r8AHDhIPjoYrdbmi7K0VTj2x2UpwW56EqEsVPcx2hN'];
     const readShareCodeRes = await readShareCode();
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
