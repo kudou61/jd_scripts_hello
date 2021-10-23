@@ -14,6 +14,13 @@ jobs:
           owner: JDHelloWorld
           head: main
           base: main
+      - uses: TG908/fork-sync@v1.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: JDHelloWorld
+          head: main # fork 上游项目需要同步的分支
+          base: dev # 本项目的目标分支
+
 #      - uses: actions/checkout@v2
 #        with:
 #          token: ${{ secrets.GITHUB_TOKEN }}
