@@ -8,8 +8,9 @@
 # 女装盲盒2021-9-6至2021-9-30
 37 1,23 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
 20 1,23 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
-
-
+0 9,13,16,19,23 * * * ts-node /scripts/jd_homepageTW.ts >> /scripts/logs/jd_homepageTW.log 2>&1
+5 0,6,18 * * * ts-node /scripts/jd_88hb.ts >> /scripts/logs/jd_88hb.log 2>&1
+1 0,9,19,23 * * * ts-node /scripts/jx_nnfls.ts >> /scripts/logs/jx_nnfls.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && ts-node jd_bean_sign.ts >> /scripts/logs/jd_bean_sign.log 2>&1
