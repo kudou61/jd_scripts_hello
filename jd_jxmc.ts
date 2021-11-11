@@ -9,7 +9,6 @@ import * as path from 'path'
 import {sendNotify} from './sendNotify'
 import {requireConfig, getBeanShareCode, getFarmShareCode, wait, requestAlgo, h5st, exceptCookie, resetHosts, randomString, o2s} from './TS_USER_AGENTS'
 
-const cow = require('./utils/jd_jxmc.js').cow
 const token = require('./utils/jd_jxmc.js').token
 
 let cookie: string = '', res: any = '', shareCodes: string[] = [], homePageInfo: any, jxToken: any, UserName: string, index: number
@@ -55,10 +54,11 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
       continue
     }
 
-    let food: number,petid: string, coins:number
+    let food: number, petid: string, coins: number, petNum: number
     try {
       food = homePageInfo.data.materialinfo[0].value
-      petid=homePageInfo.data.petinfo[0].petid
+      petid = homePageInfo.data.petinfo[0].petid
+      petNum = homePageInfo.data.petinfo.length
       coins = homePageInfo.data.coins
     } catch (e: any) {
       console.log('初始化出错，手动去app')
@@ -76,11 +76,12 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
     console.log('草草🌿', food)
     console.log('蛋蛋🥚', homePageInfo.data.eggcnt)
     console.log('钱钱💰', coins)
+    console.log('鸡鸡🐔', petNum)
 
     // 助农
     let tasks: any = await api('GetUserTaskStatusList', 'bizCode,dateType,jxpp_wxapp_type,showAreaTaskFlag,source', {dateType: '2', showAreaTaskFlag: 0, jxpp_wxapp_type: 7}, true)
     for (let t of tasks.data.userTaskStatusList) {
-      if (t.awardStatus === 2 && t.taskName !== '邀请牧场新用户助力') {
+      if (t.awardStatus === 2 && t.taskName !== '邀请牧场新用户助力' && t.taskName !== '拆开邀人红包') {
         console.log(t.taskName)
         if (t.completedTimes < t.targetTimes) {
           for (let j = t.completedTimes; j < t.targetTimes; j++) {
@@ -135,14 +136,16 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
     try {
       for (let card of res.data.cardinfo) {
         console.log(`card ${card.cardtype}`, card.currnum, '/', card.neednum)
-        if (card.currnum >= card.neednum) {
+        if (card.currnum >= card.neednum && petNum < 6) {
           console.log('可以兑换')
-          // TODO 兑换卡片
-          await sendNotify('牧场卡片可兑换', UserName)
+          res = await api('operservice/Combine', 'activeid,activekey,cardtype,channel,jxmc_jstoken,phoneid,sceneid,timestamp', {cardtype: card.cardtype})
+          res.ret === 0 ? console.log('兑换成功') : ''
+          await wait(2000)
         }
       }
     } catch (e) {
     }
+    await wait(3000)
 
     // 红包
     res = await api('operservice/GetInviteStatus', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp')
@@ -152,16 +155,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
       await makeShareCodesHb(res.data.sharekey)
     } catch (e: any) {
     }
-
-    // 收牛牛
-    let cowToken = await cow(lastgettime)
-    console.log(cowToken)
-    res = await api('operservice/GetCoin', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp,token', {token: cowToken})
-    if (res.ret === 0)
-      console.log('收牛牛:', res.data.addcoin)
-    else
-      console.log('收牛牛:', res)
-    await wait(1000)
+    await wait(3000)
 
     // 签到
     res = await api('queryservice/GetSignInfo', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp')
@@ -180,6 +174,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
     } else {
       console.log('没有获取到签到信息！')
     }
+    await wait(3000)
 
     // 登录领白菜
     res = await api('queryservice/GetVisitBackInfo', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp')
@@ -189,6 +184,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
         console.log('登录领白菜：', res.data.drawnum)
       }
     }
+    await wait(3000)
 
     console.log('任务列表开始')
     for (let j = 0; j < 30; j++) {
@@ -198,6 +194,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
       await wait(3000)
     }
     console.log('任务列表结束')
+    await wait(3000)
 
     while (coins >= 5000 && food <= 500) {
       res = await api('operservice/Buy', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp,type', {type: '1'})
@@ -213,7 +210,6 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
     }
     await wait(3000)
 
-    console.log('food:', food, food >= 10)
     while (food >= 10) {
       res = await api('operservice/Feed', 'activeid,activekey,channel,jxmc_jstoken,phoneid,sceneid,timestamp')
       if (res.ret === 0) {
@@ -227,7 +223,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
           isqueryinviteicon: 1
         })
         for (let t of homePageInfo.data.petinfo) {
-          if (t.progress === '0') {
+          if (t.cangetborn === 1) {
             petid = t.petid
             break
           }
@@ -283,6 +279,7 @@ let shareCodesHbSelf: string[] = [], shareCodesHbHw: string[] = [], shareCodesSe
       }
     }
   }
+  await wait(3000)
 
   for (let i = 0; i < cookiesArr.length; i++) {
     await getCodes()
@@ -356,6 +353,7 @@ interface Params {
   jxpp_wxapp_type?: number,
   dateType?: string,
   step?: string,
+  cardtype?: number,
 }
 
 async function getTask() {
@@ -394,11 +392,11 @@ async function api(fn: string, stk: string, params: Params = {}, temporary: bool
   let url: string
   if (['GetUserTaskStatusList', 'DoTask', 'Award'].indexOf(fn) > -1) {
     if (temporary)
-      url = h5st(`https://m.jingxi.com/newtasksys/newtasksys_front/${fn}?_=${Date.now()}&source=jxmc_zanaixin&bizCode=jxmc_zanaixin&_stk=${encodeURIComponent(stk)}&_ste=1&sceneval=2`, stk, params, 10028)
+      url = h5st(`https://m.jingxi.com/newtasksys/newtasksys_front/${fn}?_=${Date.now()}&source=jxmc_zanaixin&bizCode=jxmc_zanaixin&_stk=${encodeURIComponent(stk)}&_ste=1&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`, stk, params, 10028)
     else
-      url = h5st(`https://m.jingxi.com/newtasksys/newtasksys_front/${fn}?_=${Date.now()}&source=jxmc&bizCode=jxmc&_stk=${encodeURIComponent(stk)}&_ste=1&sceneval=2`, stk, params, 10028)
+      url = h5st(`https://m.jingxi.com/newtasksys/newtasksys_front/${fn}?_=${Date.now()}&source=jxmc&bizCode=jxmc&_stk=${encodeURIComponent(stk)}&_ste=1&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`, stk, params, 10028)
   } else {
-    url = h5st(`https://m.jingxi.com/jxmc/${fn}?channel=7&sceneid=1001&activeid=jxmc_active_0001&activekey=null&jxmc_jstoken=${jxToken['farm_jstoken']}&timestamp=${jxToken['timestamp']}&phoneid=${jxToken['phoneid']}&_stk=${encodeURIComponent(stk)}&_ste=1&_=${Date.now() + 2}&sceneval=2`, stk, params, 10028)
+    url = h5st(`https://m.jingxi.com/jxmc/${fn}?channel=7&sceneid=1001&activeid=jxmc_active_0001&activekey=null&jxmc_jstoken=${jxToken['farm_jstoken']}&timestamp=${jxToken['timestamp']}&phoneid=${jxToken['phoneid']}&_stk=${encodeURIComponent(stk)}&_ste=1&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`, stk, params, 10028)
   }
   try {
     let {data}: any = await axios.get(url, {
@@ -410,7 +408,7 @@ async function api(fn: string, stk: string, params: Params = {}, temporary: bool
       }
     })
     if (typeof data === 'string')
-      return JSON.parse(data.replace(/jsonpCBK.?\(/, '').split('\n')[0])
+      return JSON.parse(data.replace(/\n/g, '').match(/jsonpCBK.?\(([^)]*)/)![1])
     return data
   } catch (e: any) {
     console.log('api Error:', e)

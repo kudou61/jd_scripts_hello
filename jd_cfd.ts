@@ -167,7 +167,6 @@ interface Params {
     // 加速卡
     res = await api('user/GetPropCardCenterInfo', '_cfd_t,bizCode,dwEnv,ptag,source,strZone')
     let richcard: any = res.cardInfo.richcard, coincard: any = res.cardInfo.coincard, isUsing: boolean = res.cardInfo.dwWorkingType !== 0
-
     for (let card of coincard) {
       if (!isUsing && card.dwCardNums !== 0) {
         res = await api('user/UsePropCard', '_cfd_t,bizCode,dwCardType,dwEnv,ptag,source,strCardTypeIndex,strZone', {dwCardType: 1, strCardTypeIndex: encodeURIComponent(card.strCardTypeIndex)})
@@ -176,6 +175,7 @@ interface Params {
           isUsing = true
         } else {
           console.log('金币加速卡使用失败', res)
+          break
         }
       } else {
         break
@@ -190,6 +190,7 @@ interface Params {
             isUsing = true
           } else {
             console.log('点券加速卡使用失败', res)
+            break
           }
           await wait(2000)
         }
@@ -541,7 +542,6 @@ interface Params {
     // 获取随机助力码
     try {
       let {data}: any = await axi.get(`https://api.jdsharecode.xyz/api/jxcfd/30`, {timeout: 10000})
-      console.log('获取到30个随机助力码:', data.data)
       shareCodes = [...shareCodesSelf, ...shareCodesHW, ...data.data]
     } catch (e) {
       console.log('获取助力池失败')
@@ -554,8 +554,11 @@ interface Params {
       res = await api('story/helpbystage', '_cfd_t,bizCode,dwEnv,ptag,source,strShareId,strZone', {strShareId: shareCodes[j]})
       if (res.iRet === 0) {
         console.log('助力成功:', res.Data.GuestPrizeInfo.strPrizeName)
-      } else if (res.iRet === 2190) {
+      } else if (res.iRet === 2235) {
         console.log('上限')
+        break
+      } else if (res.iRet === 1023) {
+        console.log('信号弱')
         break
       } else if (res.iRet === 2191) {
         console.log('已助力')
@@ -578,7 +581,7 @@ async function api(fn: string, stk: string, params: Params = {}, taskPosition = 
     }
     url = `https://m.jingxi.com/newtasksys/newtasksys_front/${fn}?strZone=jxbfd&bizCode=${bizCode}&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&_stk=${encodeURIComponent(stk)}&_ste=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`
   } else {
-    url = `https://m.jingxi.com/jxbfd/${fn}?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=7155.9.47&_stk=${encodeURIComponent(stk)}&_ste=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`
+    url = `https://m.jingxi.com/jxbfd/${fn}?strZone=jxbfd&bizCode=jxbfd&source=jxbfd&dwEnv=7&_cfd_t=${Date.now()}&ptag=&_stk=${encodeURIComponent(stk)}&_ste=1&_=${Date.now()}&sceneval=2`
   }
   url = h5st(url, stk, params, 10032)
   let {data} = await axios.get(url, {
@@ -589,10 +592,16 @@ async function api(fn: string, stk: string, params: Params = {}, taskPosition = 
       'Cookie': cookie
     }
   })
-  if (typeof data === 'string')
-    return JSON.parse(data.replace(/\n/g, '').match(/jsonpCBK.?\(([^)]*)/)![1])
-  else
+  if (typeof data === 'string') {
+    try {
+      return JSON.parse(data.replace(/\n/g, '').match(/jsonpCBK.?\(([^)]*)/)![1])
+    } catch (e) {
+      console.log(data)
+      return ''
+    }
+  } else {
     return data
+  }
 }
 
 async function task() {
